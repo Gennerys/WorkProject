@@ -1,0 +1,6 @@
+C:\Users\oleksandr.papirnyk\Desktop\CookieApp\CookieApp\bin\Debug\CookieApp.exe.config
+C:\Users\oleksandr.papirnyk\Desktop\CookieApp\CookieApp\bin\Debug\CookieApp.exe
+C:\Users\oleksandr.papirnyk\Desktop\CookieApp\CookieApp\bin\Debug\CookieApp.pdb
+C:\Users\oleksandr.papirnyk\Desktop\CookieApp\CookieApp\obj\Debug\CookieApp.csprojAssemblyReference.cache
+C:\Users\oleksandr.papirnyk\Desktop\CookieApp\CookieApp\obj\Debug\CookieApp.exe
+C:\Users\oleksandr.papirnyk\Desktop\CookieApp\CookieApp\obj\Debug\CookieApp.pdb
