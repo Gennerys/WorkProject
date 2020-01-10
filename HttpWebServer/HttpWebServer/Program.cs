@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HttpWebServer
+namespace WebServerTestAttempt
 {
 	class Program
 	{
-		static void Main(string[] args)
+		static async Task Main(string[] args)
 		{
-			var server = new Server(1234, new ConsoleLogger());
-			server.ClientConnection();
-			
+			Server server = new Server(new ConsoleLogger());
+			await server.RunServer(1234);
 
 		}
 	}

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HttpWebServer
+namespace WebServerTestAttempt
 {
 	public class RequestDTO
 	{
@@ -13,8 +13,7 @@ namespace HttpWebServer
 		public string Url { get; set; }
 		public string Host { get; set; }
 		public string UserAgent { get; set; }
-		public  int ContentLength { get; set; }
-		public  string Cookies { get; set; }
-		//public string Body { get; set; }
+		public string Cookies { get; set; }
+		public string Body { get; set; }
 	}
 }
