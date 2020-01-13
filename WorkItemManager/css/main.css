@@ -69,7 +69,13 @@ p {
     background-size: 1.6rem 1.6rem;
     background-repeat: no-repeat;
     font: 13px "Lucida Sans Unicode","Lucida Handwriting", sans-serif;
+    cursor: pointer;
 }
+.workItemList li:hover {
+    font-weight: bold;
+    background-color: grey;
+}
+
 .rightSideWrapper{
     width: 60vw;
     height: 100vh;

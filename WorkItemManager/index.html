@@ -47,6 +47,12 @@
         <div>
             <label for="todo">Add To Do: </label>
             <input type="text" id="todo" name="todo" placeholder="Your text here" required>
+            <label for="toDoState">Choose To Do state:</label>
+            <select id ="toDoState" required>
+                <option disabled selected value=""></option>
+                <option value="Created">Created</option>
+                <option value="Done">Done</option>
+            </select>
             <button id="addToDo" type="button">Add</button>
             <h2>To Do's for specific task:</h2>
             <ol id ="ToDos">
