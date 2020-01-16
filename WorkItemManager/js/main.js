@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     let items = [];
-    // let toDoItems = [];
     const title = document.getElementById('title');
     const description = document.getElementById('description');
     const type = document.getElementById('workItemType');
@@ -9,11 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const toDoText = document.getElementById('todo');
     const toDos = document.getElementById('ToDos');
     const toDoState = document.getElementById('toDoState');
-
+    const addToDoButton = document.getElementById('addToDo');
+    let selectedWorkItem = null;
     loadDataFromStorage();
 
     document.getElementById('addWorkItem').addEventListener('click', createWorkItem);
-    document.getElementById('addToDo').addEventListener('click',createToDo);
+    addToDoButton.addEventListener('click',createToDo);
 
     function loadDataFromStorage() {
         console.log(items);
@@ -23,29 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return items = [];
         }
         for(let i = 0; i < items.length; i++){
-            const item = items[i];
-            const li = document.createElement("li");
-            li.appendChild(document.createTextNode(item.title + " " +item.description + " " + item.type));
-            li.addEventListener('click', selectWorkItem(item));
-            workItems.appendChild(li);
+            renderWorkItems(items[i]);
         }
     }
 
-    function selectWorkItem(item) {
-        return function() {
-            console.log(item);
-        };
-    }
-
-
-
     function createWorkItem() {
         const workItem = getWorkItemData();
-        const li = document.createElement("li");
-        li.appendChild(document.createTextNode(workItem.title + " " + workItem.description + " " + workItem.type));
-        li.addEventListener('click',selectWorkItem(workItem));
-        workItems.appendChild(li);
+        renderWorkItems(workItem);
         saveWorkItem(workItem);
+    }
+    function renderWorkItems(item) {
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode(item.title + " " + item.description + " " + item.type));
+        li.setAttribute('id',`${item.id}`);
+        li.addEventListener('click',onClickWorkItem);
+        workItems.appendChild(li);
     }
 
     function getWorkItemData() {
@@ -53,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             title: title.value,
             description: description.value,
             type: type.value,
+            id: (Math.random() * 10000000).toFixed(0),
             toDoList: []
         };
     }
@@ -74,39 +67,21 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    function createToDo(){
-        const toDo = getToDoData();
-        const li = document.createElement("li");
-        if(toDo.toDoState === "Created"){
-            li.setAttribute('Status','Created');
-        }
-        else{
-            li.style.textDecoration = 'line-through';
-            li.appendChild(document.createTextNode(toDo.toDoText));
-            li.setAttribute('Status','Done');
-        }
-        toDos.appendChild(li);
-        saveToDo(toDo);
-        createDeleteButtonForTodo(li);
-        createCompletedButtonForTodo(li);
-    }
-
-    function saveToDo(toDo) {
-        toDoItems.push(toDo);
-        localStorage.setItem('toDos',JSON.stringify(toDoItems));
-    }
-    function createDeleteButtonForTodo(li) {
+    function createDeleteButtonForTodo(li,selectedWorkItem) {
         let deleteToDo = document.createElement('Button');
         let deleteButtonText = document.createTextNode('Delete ToDo');
         deleteToDo.appendChild(deleteButtonText);
         li.appendChild(deleteToDo);
         deleteToDo.addEventListener('click', ()=>{
-            toDoItems.splice(toDoItems.indexOf(li),1);
+            console.log(toDosItems);
+            selectedWorkItem.splice(selectedWorkItem.indexOf(li),1);
             toDos.removeChild(li);
+            localStorage.setItem('items', JSON.stringify(items));
         });
     }
 
     function createCompletedButtonForTodo(li) {
+        console.log(li);
         let completeToDo = document.createElement('Button');
         let completeButtonText;
         if(li.getAttribute('Status') === "Created"){
@@ -131,11 +106,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
-
-    function onClickHandler(event) {
-        console.log(event.target.id);
+    function saveToDo(currentWorkItemToDoList,toDo) {
+        currentWorkItemToDoList.push(toDo);
+        localStorage.setItem('items', JSON.stringify(items));
     }
+
+    function retrieveWorkItemToDoList(event) {
+         items = JSON.parse(localStorage.getItem('items'));
+         let currentWorkItemToDoList = items.find(element => element.id === event.target.id).toDoList;
+         selectedWorkItem = currentWorkItemToDoList;
+
+         return currentWorkItemToDoList;
+    }
+    function createToDo() {
+        const toDo = getToDoData();
+        renderToDoItem(toDo);
+        saveToDo(selectedWorkItem,toDo);
+        return toDo;
+    }
+    function renderToDoItem(toDo) {
+        const li = document.createElement("li");
+        if(toDo.toDoState === "Created"){
+            li.appendChild(document.createTextNode(toDo.toDoText));
+            li.setAttribute('Status','Created');
+        }
+        else{
+            li.style.textDecoration = 'line-through';
+            li.appendChild(document.createTextNode(toDo.toDoText));
+            li.setAttribute('Status','Done');
+        }
+        toDos.appendChild(li);
+        createCompletedButtonForTodo(li);
+        createDeleteButtonForTodo(li,selectedWorkItem);
+    }
+
+    function renderToDoItems(currentWorkItemToDoList) {
+        clearToDoItemList();
+        for(let i = 0; i < currentWorkItemToDoList.length; i++){
+            renderToDoItem(currentWorkItemToDoList[i]);
+        }
+    }
+    function clearToDoItemList() {
+        toDos.innerHTML = '';
+    }
+
+   function onClickWorkItem(event) {
+        addToDoButton.disabled = false;
+        let currentWorkItemToDoList = retrieveWorkItemToDoList(event);
+        console.log(currentWorkItemToDoList);
+        renderToDoItems(currentWorkItemToDoList);
+    }
+
 });
 
 
